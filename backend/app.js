@@ -3,124 +3,137 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
-
 const app = express();
 
-// middleware  call
-
 app.use(cors());
-
-// this url is taken in mongodb and right click then copy string code
-
-mongoose.connect(process.env.MONGO_URL)
-    .then(() => {
-        console.log("DB Connected Sucessfully");
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-
-
-// -------------To create a schema for collection--------------//
-const todoListSchema = new mongoose.Schema({
-    title: {
-        required: true,
-        type: String
-    },
-    description: {
-        required: true,
-        type: String
-    },
-});
-
-
-// -----------------create a collectiom--------------
-
-const todoListModel = mongoose.model('todoList', todoListSchema);
-
 app.use(express.json());
 
-//----------------Creating Todo List--------------//
+const todoListSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+    },
+  },
+  { timestamps: true }
+);
+
+const todoListModel = mongoose.model("todoList", todoListSchema);
+
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", message: "Todo API is running" });
+});
 
 app.post("/addList", async (req, res) => {
-    const { title, description } = req.body;
+  const { title, description } = req.body;
 
+  if (!title?.trim() || !description?.trim()) {
+    return res.status(400).json({
+      message: "Title and description are required",
+    });
+  }
 
-    try {
-        const todoData = new todoListModel({ title, description });
-        await todoData.save();
-        res.status(201).json(todoData); /*----------Sucess message status------------*/
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message });/*----------Error  message status------------*/
+  try {
+    const todoData = await todoListModel.create({
+      title: title.trim(),
+      description: description.trim(),
+    });
 
-    }
-
-
+    res.status(201).json(todoData);
+  } catch (error) {
+    console.error("Create todo error:", error);
+    res.status(500).json({ message: "Failed to create todo" });
+  }
 });
-//--------------------Read Todo List------------------//
 
 app.get("/showList", async (req, res) => {
-
-    try {
-        const overallTodoList = await todoListModel.find()
-        res.json(overallTodoList);
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-
-
-
+  try {
+    const overallTodoList = await todoListModel.find().sort({ createdAt: -1 });
+    res.json(overallTodoList);
+  } catch (error) {
+    console.error("Fetch todo error:", error);
+    res.status(500).json({ message: "Failed to fetch todo list" });
+  }
 });
 
-//---------------------Update Todo List------------------//
+app.put("/updateList/:id", async (req, res) => {
+  const { title, description } = req.body;
+  const { id } = req.params;
 
-app.put("/updateList/:abc", async (req, res) => {
-    const { title, description } = req.body;
-    const id = req.params.abc;
-    try {
-        const updateTodo = await todoListModel.findByIdAndUpdate(id, {
-            title, description
-        }, { new: true });
-        if (!updateTodo) {
-            return res.status(404).json({ message: "Todo is not found" })
-        }
-        res.json(updateTodo);
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid todo ID" });
+  }
+
+  if (!title?.trim() || !description?.trim()) {
+    return res.status(400).json({
+      message: "Title and description are required",
+    });
+  }
+
+  try {
+    const updateTodo = await todoListModel.findByIdAndUpdate(
+      id,
+      {
+        title: title.trim(),
+        description: description.trim(),
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updateTodo) {
+      return res.status(404).json({ message: "Todo is not found" });
     }
-    catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+
+    res.json(updateTodo);
+  } catch (error) {
+    console.error("Update todo error:", error);
+    res.status(500).json({ message: "Failed to update todo" });
+  }
 });
 
+app.delete("/deleteList/:id", async (req, res) => {
+  const { id } = req.params;
 
-//----------------------Delete to-do list----------------------------//
-app.delete("/deleteList/:bcd", async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid todo ID" });
+  }
 
-    let id = req.params.bcd;
-    try {
-        const deleteTodo = await todoListModel.findByIdAndDelete(id);
-        if (!deleteTodo) {
-            return res.status(404).json({
-                message: "Todo is not found"
-            })
-        }
+  try {
+    const deleteTodo = await todoListModel.findByIdAndDelete(id);
 
-        res.status(200).json({
-            message: "Todo Deleted Successfully"
-        });
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message });
+    if (!deleteTodo) {
+      return res.status(404).json({ message: "Todo is not found" });
     }
 
-
+    res.json({ message: "Todo deleted successfully" });
+  } catch (error) {
+    console.error("Delete todo error:", error);
+    res.status(500).json({ message: "Failed to delete todo" });
+  }
 });
-
 
 const port = process.env.PORT || 3030;
-app.listen(port, () => {
-    console.log(`Server Is Running On ${port} Port Number`);
-});
 
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log("DB connected successfully");
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection failed:", error);
+    process.exit(1);
+  });
