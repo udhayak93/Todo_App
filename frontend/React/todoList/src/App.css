@@ -1,0 +1,317 @@
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: Arial, Helvetica, sans-serif;
+          background: #f4f7fb;
+          color: #172033;
+        }
+
+        .app {
+          width: 100%;
+          max-width: 1400px;
+          margin: auto;
+          padding: 30px;
+          display: grid;
+          grid-template-columns: 1fr 1.5fr;
+          gap: 25px;
+        }
+
+        /* ================= CARD ================= */
+
+        .card {
+          background: #ffffff;
+          border: 1px solid #e1e6ee;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 5px 20px rgba(20, 40, 80, 0.08);
+        }
+        /* ================= CARD-1 ================= */
+
+        .card-1{
+          height: 560px;
+        }
+
+        /* ================= HEADER ================= */
+
+        .cardHeader {
+          min-height: 120px;
+          padding: 25px;
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          color: white;
+        }
+
+        .createHeader {
+          background: linear-gradient(
+            135deg,
+            #123b8f,
+            #1769d2
+          );
+        }
+
+        .showHeader {
+          background: linear-gradient(
+            135deg,
+            #087f8c,
+            #0794a8
+          );
+        }
+
+        .headerIcon {
+          width: 52px;
+          height: 52px;
+          min-width: 52px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.15);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 26px;
+          font-weight: bold;
+        }
+
+        .cardHeader h1 {
+          font-size: 27px;
+          margin-bottom: 6px;
+        }
+
+        .cardHeader p {
+          font-size: 14px;
+          opacity: 0.9;
+        }
+
+        /* ================= FORM ================= */
+
+        .form {
+          padding: 30px;
+        }
+
+        .form label {
+          display: block;
+          margin-bottom: 9px;
+          margin-top: 20px;
+          font-size: 15px;
+          font-weight: 600;
+        }
+
+        .form label:first-child {
+          margin-top: 0;
+        }
+
+        .required {
+          color: #e53935;
+        }
+
+        .input,
+        .textarea {
+          width: 100%;
+          padding: 14px;
+          border: 1px solid #d7dce5;
+          border-radius: 8px;
+          font-size: 15px;
+          font-family: inherit;
+          outline: none;
+          transition: 0.2s;
+        }
+
+        .input:focus,
+        .textarea:focus {
+          border-color: #1769d2;
+          box-shadow: 0 0 0 3px rgba(23,105,210,0.1);
+        }
+
+        .textarea {
+          height: 180px;
+          resize: vertical;
+        }
+
+        /* ================= SUBMIT ================= */
+
+        .submitBtn {
+          display: block;
+          margin: 28px 0 0 auto;
+          padding: 13px 30px;
+          border: none;
+          border-radius: 7px;
+          background: #1554b8;
+          color: white;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+
+        .submitBtn:hover {
+          background: #0d4298;
+          transform: translateY(-1px);
+        }
+
+        /* ================= WORK LIST ================= */
+
+        .task {
+            padding: 15px;
+        }
+
+        .taskItem {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          padding: 20px;
+          border: 1px solid #e2e7ee;
+          border-radius: 10px;
+          transition: 0.2s;
+        }
+
+        .taskItem:hover {
+          box-shadow: 0 5px 15px rgba(20,40,80,0.08);
+        }
+
+        .taskIcon {
+          width: 55px;
+          height: 55px;
+          min-width: 55px;
+          border-radius: 50%;
+          background: #e8f5f7;
+          color: #078b96;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 22px;
+        }
+
+        .taskInfo {
+          flex: 1;
+        }
+
+        .taskInfo h2 {
+          font-size: 18px;
+          margin-bottom: 7px;
+        }
+
+        .taskInfo p {
+          color: #687386;
+          font-size: 14px;
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .actions {
+          display: flex;
+          gap: 10px;
+        }
+
+        .actionBtn {
+          padding: 9px 15px;
+          background: white;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+
+        .editBtn {
+          border: 1px solid #1769d2;
+          color: #1769d2;
+        }
+
+        .editBtn:hover {
+          background: #1769d2;
+          color: white;
+        }
+
+        .deleteBtn {
+          border: 1px solid #e53935;
+          color: #e53935;
+        }
+
+        .deleteBtn:hover {
+          background: #e53935;
+          color: white;
+        }
+
+        .empty {
+          padding: 50px 20px;
+          text-align: center;
+          color: #8993a4;
+        }
+
+        @media (max-width: 950px) {
+
+          .app {
+            grid-template-columns: 1fr;
+          }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+          .app {
+            padding: 12px;
+            gap: 15px;
+          }
+
+          .cardHeader {
+            min-height: 100px;
+            padding: 18px;
+          }
+
+          .cardHeader h1 {
+            font-size: 21px;
+          }
+
+          .cardHeader p {
+            font-size: 12px;
+          }
+
+          .headerIcon {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            font-size: 21px;
+          }
+
+          .form {
+            padding: 20px;
+          }
+
+          .textarea {
+            height: 150px;
+          }
+
+          .submitBtn {
+            width: 100%;
+          }
+
+          .task {
+            padding: 15px;
+          }
+
+          .taskItem {
+            align-items: flex-start;
+            flex-wrap: wrap;
+
+            padding: 15px;
+            gap: 12px;
+          }
+
+          .workInfo {
+            min-width: calc(100% - 70px);
+          }
+
+          .actions {
+            width: 100%;
+            margin-top: 5px;
+          }
+
+          .actionBtn {
+            flex: 1;
+          }
+
+        }
