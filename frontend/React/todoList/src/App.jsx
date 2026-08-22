@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 
 const EMPTY_ITEM = { title: "", description: "" };
-const API_URL = (import.meta.env.VITE_API_URL || "https://todo-app-lctn.onrender.com").replace(/\/$/, "");
+const API_URL = (import.meta.env.VITE_API_URL || "https://todo-app-t0wo.onrender.com").replace(/\/$/, "");
 
 function App() {
   const [listItem, setListItem] = useState(EMPTY_ITEM);
