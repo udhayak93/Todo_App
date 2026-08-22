@@ -37,7 +37,7 @@ jobs:
 
       - name: Build application
         env:
-          VITE_API_URL: https://todo-app-lctn.onrender.com
+          VITE_API_URL: https://todo-app-t0wo.onrender.com
         run: npm run build
 
       - name: Setup Pages
